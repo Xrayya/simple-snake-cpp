@@ -3,6 +3,8 @@
 #include "direction.hpp"
 #include "food.hpp"
 #include "movable.hpp"
+#include <cstddef>
+#include <iterator>
 #include <memory>
 
 class SnakeNode {
@@ -38,6 +40,39 @@ public:
     head->backNode->frontNode = head.get();
     tail = head->backNode.get();
   }
+
+  class Iterator {
+  public:
+    using iterator_category = std::forward_iterator_tag;
+    using value_type = SnakeNode;
+    using difference_type = std::ptrdiff_t;
+    using pointer = SnakeNode *;
+    using reference = SnakeNode &;
+
+    explicit Iterator(SnakeNode *node) : current(node) {}
+
+    reference operator*() const { return *current; }
+    pointer operator->() const { return current; }
+
+    Iterator &operator++() {
+      current = current->backNode.get();
+      return *this;
+    }
+
+    bool operator==(const Iterator &other) const {
+      return current == other.current;
+    }
+
+    bool operator!=(const Iterator &other) const {
+      return current != other.current;
+    }
+
+  private:
+    SnakeNode *current;
+  };
+
+  Iterator begin() { return Iterator(head.get()); }
+  Iterator end() { return Iterator(tail->backNode.get()); }
 
   void move(Direction direction) override;
   int eat(IFood &food);
