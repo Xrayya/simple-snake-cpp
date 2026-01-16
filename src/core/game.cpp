@@ -1,7 +1,8 @@
 #include "game.hpp"
 
-Game::Game(int width, int height)
-    : snake(Position(width / 2, height / 2)), width(width), height(height) {}
+Game::Game(int width, int height, std::unique_ptr<IFoodFactory> foodFactory)
+    : snake(Position(width / 2, height / 2)),
+      foodFactory(std::move(foodFactory)), width(width), height(height) {}
 
 const int &Game::getWidth() const { return width; }
 
