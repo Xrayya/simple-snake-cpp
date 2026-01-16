@@ -1,22 +1,23 @@
 #pragma once
 
-#include "food/food.hpp"
 #include "snake/snake.hpp"
-#include <vector>
 
 class Game {
 public:
   Snake snake;
-  std::vector<std::unique_ptr<IFood>> foods;
-  std::vector<std::vector<std::string>> field;
+  // std::vector<std::unique_ptr<IFood>> foods;
 
   Game(int width, int height);
 
-  void update();
-  bool isGameRunning();
+  const int &getWidth() const;
+  const int &getHeight() const;
+
+  // void update();
+  // bool isRunning();
 
 private:
-  int score;
-  IFood *checkFoodEaten();
-  bool checkSnakeCollideWithBoundaries();
+  int width, height;
+  // int score;
+  // IFood *checkFoodEaten();
+  // bool checkSnakeCollideWithBoundaries();
 };
