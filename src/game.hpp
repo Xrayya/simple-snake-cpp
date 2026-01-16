@@ -1,3 +1,5 @@
+#pragma once
+
 #include "snake/snake.hpp"
 #include <vector>
 
