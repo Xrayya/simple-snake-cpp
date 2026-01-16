@@ -5,5 +5,5 @@
 class IMovable {
 public:
   Direction direction = Direction::Left;
-  virtual void move(Direction) = 0;
+  virtual void move() = 0;
 };
