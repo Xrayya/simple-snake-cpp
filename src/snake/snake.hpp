@@ -2,9 +2,15 @@
 
 #include "../core/movable.hpp"
 #include "../core/position.hpp"
-#include "../food/food.hpp"
-#include "snake_node.hpp"
 #include <memory>
+
+struct SnakeNode {
+  Position pos;
+  std::unique_ptr<SnakeNode> backNode;
+  SnakeNode *frontNode = nullptr;
+
+  explicit SnakeNode(Position pos);
+};
 
 class Snake : public IMovable {
 public:
@@ -12,8 +18,8 @@ public:
 
   explicit Snake(Position pos);
 
-  void move(Direction direction) override;
-  int eat(IFood &food);
+  const Position &getHeadPosition() const;
+  void move() override;
 
   class Iterator {
   public:

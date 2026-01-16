@@ -1,6 +1,8 @@
 #include "snake.hpp"
 #include <memory>
 
+SnakeNode::SnakeNode(Position pos) : pos(pos) {}
+
 Snake::Snake(Position pos) : head(std::make_unique<SnakeNode>(pos)) {
   switch (direction) {
   case Up:
@@ -23,22 +25,24 @@ Snake::Snake(Position pos) : head(std::make_unique<SnakeNode>(pos)) {
   lastTailPosition = tail->pos;
 }
 
+const Position &Snake::getHeadPosition() const { return head->pos; }
+
 void Snake::grow() {
   tail->backNode = std::make_unique<SnakeNode>(lastTailPosition);
   tail->backNode->frontNode = tail;
   tail = tail->backNode.get();
 }
 
-void Snake::move(Direction direction) {
+void Snake::move() {
   lastTailPosition.x = tail->pos.x;
   lastTailPosition.y = tail->pos.y;
 
-  auto frontNodePos = &tail->frontNode->pos;
-  auto currentNode = tail->frontNode;
-  while (currentNode->frontNode != nullptr) {
-    tail->pos.x = frontNodePos->x;
-    tail->pos.y = frontNodePos->y;
-    currentNode = currentNode->frontNode;
+  for (auto i = this->rbegin(); i != this->rend(); ++i) {
+    auto &node = *i;
+    if (node.frontNode) {
+      node.pos.x = node.frontNode->pos.x;
+      node.pos.y = node.frontNode->pos.y;
+    }
   }
 
   switch (direction) {
@@ -55,11 +59,6 @@ void Snake::move(Direction direction) {
     head->pos.x++;
     break;
   }
-}
-
-int Snake::eat(IFood &food) {
-  grow();
-  return food.scoreAddition();
 }
 
 Snake::Iterator::Iterator(SnakeNode *node, SnakeNode *tail)
