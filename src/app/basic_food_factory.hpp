@@ -1,0 +1,13 @@
+#include "core/food/food.hpp"
+#include "core/game.hpp"
+#include <memory>
+#include <vector>
+
+class BasicFoodFactory : public IFoodFactory {
+public:
+  BasicFoodFactory(int xMax, int yMax);
+  const IFood* generate() override;
+
+private:
+  std::vector<std::unique_ptr<IFood>> foodLists;
+};
