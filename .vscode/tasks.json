@@ -1,0 +1,23 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Setup CMake",
+      "type": "shell",
+      "command": "bash \"-c mkdir -p build && cd build && cmake ..\"",
+      "group": "build"
+    },
+    {
+      "label": "Build Project",
+      "type": "shell",
+      "command": "bash -c \"cd build && cmake --build .\"",
+      "group": "build"
+    },
+    {
+      "label": "Build Fresh",
+      "type": "shell",
+      "command": "bash -c \"cd build && cmake --fresh .. && cmake --build .\"",
+      "group": "build"
+    }
+  ]
+}
