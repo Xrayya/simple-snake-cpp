@@ -34,17 +34,25 @@ void Renderer::render() {
 }
 
 void Renderer::update() {
+  // Clear layout
   for (int i = 0; i < game.getHeight(); i++) {
     for (int j = 0; j < game.getWidth(); j++) {
       layout[i][j] = " ";
     }
   }
 
+  // Render snake
   for (const auto &node : const_cast<Snake &>(game.snake)) {
     if (!node.frontNode) {
       layout[node.pos.y][node.pos.x] = Icon::Snake::Head;
     } else {
       layout[node.pos.y][node.pos.x] = Icon::Snake::Body;
     }
+  }
+
+  // Render foods
+  for (const auto &food : game.activeFoods) {
+    const auto &foodPos = food->position();
+    layout[foodPos.y][foodPos.x] = Icon::Food;
   }
 }

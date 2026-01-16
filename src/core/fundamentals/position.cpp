@@ -7,6 +7,7 @@ bool Position::operator==(const Position &other) const {
   return x == other.x && y == other.y;
 }
 
-Position Position::random(int xMax, int yMax) {
-  return Position(generateRandomNum(0, xMax), generateRandomNum(0, yMax));
+Position Position::random(int layoutWidth, int layoutHeight) {
+  return Position(generateRandomNum<int>(0, layoutWidth - 1),
+                  generateRandomNum<int>(0, layoutHeight - 1));
 }

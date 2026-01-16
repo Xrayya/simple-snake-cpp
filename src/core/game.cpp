@@ -2,11 +2,32 @@
 
 Game::Game(int width, int height, std::unique_ptr<IFoodFactory> foodFactory)
     : snake(Position(width / 2, height / 2)),
-      foodFactory(std::move(foodFactory)), width(width), height(height) {}
+      foodFactory(std::move(foodFactory)), width(width), height(height) {
+  spawnFood();
+}
 
 const int &Game::getWidth() const { return width; }
 
 const int &Game::getHeight() const { return height; }
+
+void Game::spawnFood() {
+  auto newFood = foodFactory->generate();
+
+  // Ensure food does not spawn on the snake
+  bool confict = true;
+  while (confict) {
+    confict = false;
+    for (const auto &node : snake) {
+      if (node.pos == newFood->position()) {
+        confict = true;
+        newFood = foodFactory->generate();
+        break;
+      }
+    }
+  }
+
+  activeFoods.emplace_back(std::move(newFood));
+}
 
 // void Game::update() {
 //   for (auto &food : foods) {

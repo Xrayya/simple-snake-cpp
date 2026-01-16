@@ -31,6 +31,7 @@ void Snake::grow() {
   tail->backNode = std::make_unique<SnakeNode>(lastTailPosition);
   tail->backNode->frontNode = tail;
   tail = tail->backNode.get();
+  length++;
 }
 
 void Snake::move() {

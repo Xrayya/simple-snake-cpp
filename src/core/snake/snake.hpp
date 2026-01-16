@@ -14,7 +14,7 @@ struct SnakeNode {
 
 class Snake : public IMovable {
 public:
-  int length = 1;
+  int length = 2;
 
   explicit Snake(Position pos);
 

@@ -2,12 +2,13 @@
 
 class Apple : public IFood {
 public:
-  Apple(int xMax, int yMax);
+  Apple(int layoutWidth, int layoutHeight);
 
   const Position position() override;
   void update() override;
   int getAdditionScore() override;
+  std::unique_ptr<IFood> clone() const override;
 
 private:
-  int xMax, yMax;
+  Position pos;
 };

@@ -5,8 +5,8 @@
 
 class BasicFoodFactory : public IFoodFactory {
 public:
-  BasicFoodFactory(int xMax, int yMax);
-  const IFood* generate() override;
+  BasicFoodFactory(int layoutWidth, int layoutHeight);
+  std::unique_ptr<IFood> generate() override;
 
 private:
   std::vector<std::unique_ptr<IFood>> foodLists;

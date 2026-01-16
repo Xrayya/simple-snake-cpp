@@ -1,6 +1,7 @@
 #include "core/food/food.hpp"
+#include <memory>
 
 class IFoodFactory {
 public:
-  virtual const IFood *generate() = 0;
+  virtual std::unique_ptr<IFood> generate() = 0;
 };
