@@ -4,16 +4,16 @@
 
 struct Icon {
   struct Snake {
-    char head = '@';
-    char body = 'o';
+    static const char Head = '@';
+    static const char Body = 'o';
   };
   struct Boundary {
-    std::string topLeftCorner = "╭";
-    std::string topRightCorner = "╮";
-    std::string bonttomLeftCorner = "╰";
-    std::string bottomRightCorner = "╯";
-    std::string horizontal = "─";
-    std::string vertical = "│";
+    static constexpr std::string TopLeftCorner = "╭";
+    static constexpr std::string TopRightCorner = "╮";
+    static constexpr std::string BonttomLeftCorner = "╰";
+    static constexpr std::string BottomRightCorner = "╯";
+    static constexpr std::string Horizontal = "─";
+    static constexpr std::string Vertical = "│";
   };
-  std::string food = "$";
+  static const char Food = '$';
 };
