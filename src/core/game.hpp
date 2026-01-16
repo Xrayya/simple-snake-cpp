@@ -1,11 +1,13 @@
 #pragma once
 
+#include "food/food.hpp"
 #include "snake/snake.hpp"
+#include <vector>
 
 class Game {
 public:
   Snake snake;
-  // std::vector<std::unique_ptr<IFood>> foods;
+  std::vector<std::unique_ptr<IFood>> foods;
 
   Game(int width, int height);
 

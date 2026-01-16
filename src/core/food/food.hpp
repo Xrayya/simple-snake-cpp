@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../core/movable.hpp"
-#include "../core/position.hpp"
+#include "../fundamentals/movable.hpp"
+#include "../fundamentals/position.hpp"
 
 class IFood {
 public:
