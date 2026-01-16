@@ -12,9 +12,13 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-add_executable(snake
-    src/main.cpp
+file(GLOB_RECURSE SOURCES
+    src/*.cpp
 )
+
+add_executable(snake ${SOURCES})
+
+target_include_directories(snake PRIVATE src)
 
 target_compile_options(snake PRIVATE
     -Wall
