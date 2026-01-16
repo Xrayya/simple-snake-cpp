@@ -1,6 +1,6 @@
 #pragma once
 
-#include "core/direction.hpp"
+#include "core/fundamentals/direction.hpp"
 
 class InputHanlder {
 public:
