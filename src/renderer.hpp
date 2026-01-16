@@ -2,7 +2,7 @@
 
 class Renderer {
 public:
-  Renderer(const Game &game) : game(game) {}
+  Renderer(const Game &game);
 
   const Game &game;
 
