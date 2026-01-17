@@ -9,6 +9,8 @@ struct SnakeNode {
   std::unique_ptr<SnakeNode> backNode;
   SnakeNode *frontNode = nullptr;
 
+  bool operator==(const SnakeNode &other) const;
+
   explicit SnakeNode(Position pos);
 };
 

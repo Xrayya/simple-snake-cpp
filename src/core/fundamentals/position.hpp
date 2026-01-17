@@ -8,5 +8,6 @@ public:
   Position() = default;
 
   bool operator==(const Position &other) const;
+
   static Position random(int layoutWidth, int layoutHeight);
 };

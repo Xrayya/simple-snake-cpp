@@ -16,8 +16,8 @@ public:
   const int &getWidth() const;
   const int &getHeight() const;
 
-  // void update();
-  // bool isRunning();
+  void update();
+  bool isRunning();
 
 private:
   int width, height;

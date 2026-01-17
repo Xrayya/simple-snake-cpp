@@ -12,6 +12,9 @@ Renderer::Renderer(const Game &game)
 void Renderer::render() {
   update();
 
+  // Clear terminal using ANSI escape codes
+  std::cout << "\033[2J\033[H";
+
   std::cout << Icon::Boundary::TopLeftCorner;
   for (int i = 0; i < game.getWidth(); i++) {
     std::cout << Icon::Boundary::Horizontal;
@@ -30,7 +33,7 @@ void Renderer::render() {
   for (int i = 0; i < game.getWidth(); i++) {
     std::cout << Icon::Boundary::Horizontal;
   }
-  std::cout << Icon::Boundary::BottomRightCorner;
+  std::cout << Icon::Boundary::BottomRightCorner << std::endl;
 }
 
 void Renderer::update() {
@@ -41,7 +44,7 @@ void Renderer::update() {
     }
   }
 
-  // Render snake
+  // Update snake on layout
   for (const auto &node : const_cast<Snake &>(game.snake)) {
     if (!node.frontNode) {
       layout[node.pos.y][node.pos.x] = Icon::Snake::Head;
@@ -50,7 +53,7 @@ void Renderer::update() {
     }
   }
 
-  // Render foods
+  // Update food on layout
   for (const auto &food : game.activeFoods) {
     const auto &foodPos = food->position();
     layout[foodPos.y][foodPos.x] = Icon::Food;

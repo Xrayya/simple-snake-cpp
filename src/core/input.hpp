@@ -2,7 +2,7 @@
 
 #include "core/fundamentals/direction.hpp"
 
-class InputHanlder {
+class InputHandler {
 public:
   Direction poll();
 };

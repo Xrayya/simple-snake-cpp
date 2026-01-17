@@ -3,6 +3,11 @@
 
 SnakeNode::SnakeNode(Position pos) : pos(pos) {}
 
+bool SnakeNode::operator==(const SnakeNode &other) const {
+  return pos == other.pos && backNode.get() == other.backNode.get() &&
+         frontNode == other.frontNode;
+}
+
 Snake::Snake(Position pos) : head(std::make_unique<SnakeNode>(pos)) {
   switch (direction) {
   case Up:
@@ -17,6 +22,8 @@ Snake::Snake(Position pos) : head(std::make_unique<SnakeNode>(pos)) {
   case Left:
     head->backNode = std::make_unique<SnakeNode>(Position(pos.x + 1, pos.y));
     break;
+  case None:
+    break;
   }
 
   head->backNode->frontNode = head.get();
@@ -25,7 +32,7 @@ Snake::Snake(Position pos) : head(std::make_unique<SnakeNode>(pos)) {
   lastTailPosition = tail->pos;
 }
 
-const Position &Snake::getHeadPosition() const { return head->pos; }
+const Position &Snake::getHeadPosition() const { return head.get()->pos; }
 
 void Snake::grow() {
   tail->backNode = std::make_unique<SnakeNode>(lastTailPosition);

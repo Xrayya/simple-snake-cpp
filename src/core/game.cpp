@@ -10,6 +10,32 @@ const int &Game::getWidth() const { return width; }
 
 const int &Game::getHeight() const { return height; }
 
+void Game::update() {
+  for (auto &food : activeFoods) {
+    food->update();
+  }
+  snake.move();
+}
+
+bool Game::isRunning() {
+  const auto &snakeHeadPos = snake.getHeadPosition();
+
+  // Check collision with self
+  for (const auto &node : snake) {
+    if (node.pos == snakeHeadPos && node != *snake.begin()) {
+      return false;
+    }
+  }
+
+  // Check collision with boundaries
+  if (snakeHeadPos.x < 0 || snakeHeadPos.y < 0 || snakeHeadPos.y >= height ||
+      snakeHeadPos.x >= width) {
+    return false;
+  }
+
+  return true;
+}
+
 void Game::spawnFood() {
   auto newFood = foodFactory->generate();
 
@@ -29,16 +55,6 @@ void Game::spawnFood() {
   activeFoods.emplace_back(std::move(newFood));
 }
 
-// void Game::update() {
-//   for (auto &food : foods) {
-//     food->update();
-//   }
-//   snake.move();
-//   if (auto food = checkFoodEaten()) {
-//     score += food->getAdditionScore();
-//   }
-// }
-//
 // bool Game::isRunning() {
 //   for (auto &node : snake) {
 //     if (node.pos == snake.getHeadPosition()) {
