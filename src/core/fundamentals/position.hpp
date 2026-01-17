@@ -4,10 +4,10 @@ class Position {
 public:
   int x, y;
 
-  Position(int x, int y);
+  Position(const int &x, const int &y);
   Position() = default;
 
   bool operator==(const Position &other) const;
 
-  static Position random(int layoutWidth, int layoutHeight);
+  static Position random(const int &layoutWidth, const int &layoutHeight);
 };

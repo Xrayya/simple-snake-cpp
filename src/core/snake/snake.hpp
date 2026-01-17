@@ -1,5 +1,7 @@
 #pragma once
 
+#include "core/food/food.hpp"
+#include "core/fundamentals/direction.hpp"
 #include "core/fundamentals/movable.hpp"
 #include "core/fundamentals/position.hpp"
 #include <memory>
@@ -11,16 +13,18 @@ struct SnakeNode {
 
   bool operator==(const SnakeNode &other) const;
 
-  explicit SnakeNode(Position pos);
+  explicit SnakeNode(const Position &pos);
 };
 
 class Snake : public IMovable {
 public:
   int length = 2;
 
-  explicit Snake(Position pos);
+  explicit Snake(const Position &pos, const Direction &direction);
 
   const Position &getHeadPosition() const;
+  Direction direction;
+  void eat(const IFood &food);
   void move() override;
 
   class Iterator {
@@ -58,10 +62,8 @@ public:
   ReverseIterator rbegin();
   ReverseIterator rend();
 
-private:
+protected:
   std::unique_ptr<SnakeNode> head;
   SnakeNode *tail;
-  Position lastTailPosition;
-
-  void grow();
+  int pendingGrowth = 0;
 };

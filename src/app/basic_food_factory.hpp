@@ -1,5 +1,6 @@
 #include "core/food/food.hpp"
 #include "core/game.hpp"
+#include <functional>
 #include <memory>
 #include <vector>
 
@@ -9,5 +10,6 @@ public:
   std::unique_ptr<IFood> generate() override;
 
 private:
-  std::vector<std::unique_ptr<IFood>> foodLists;
+  using FoodCreatorFunc = std::function<std::unique_ptr<IFood>()>;
+  std::vector<FoodCreatorFunc> foodCreators;
 };

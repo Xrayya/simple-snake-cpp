@@ -1,6 +1,7 @@
 #include "renderer.hpp"
 #include "icon.hpp"
 #include <iostream>
+#include <ostream>
 #include <string>
 #include <vector>
 
@@ -14,6 +15,10 @@ void Renderer::render() {
 
   // Clear terminal using ANSI escape codes
   std::cout << "\033[2J\033[H";
+
+  std::cout << "Score: " << game.getScore() << std::endl;
+
+  std::cout << std::endl;
 
   std::cout << Icon::Boundary::TopLeftCorner;
   for (int i = 0; i < game.getWidth(); i++) {
@@ -34,6 +39,8 @@ void Renderer::render() {
     std::cout << Icon::Boundary::Horizontal;
   }
   std::cout << Icon::Boundary::BottomRightCorner << std::endl;
+
+  std::cout << std::flush;
 }
 
 void Renderer::update() {
@@ -44,18 +51,18 @@ void Renderer::update() {
     }
   }
 
+  // Update food on layout
+  for (const auto &food : game.getAciveFoods()) {
+    const auto &foodPos = food->position();
+    layout[foodPos.y][foodPos.x] = Icon::Food;
+  }
+
   // Update snake on layout
-  for (const auto &node : const_cast<Snake &>(game.snake)) {
+  for (const auto &node : const_cast<Snake &>(game.getSnake())) {
     if (!node.frontNode) {
       layout[node.pos.y][node.pos.x] = Icon::Snake::Head;
     } else {
       layout[node.pos.y][node.pos.x] = Icon::Snake::Body;
     }
-  }
-
-  // Update food on layout
-  for (const auto &food : game.activeFoods) {
-    const auto &foodPos = food->position();
-    layout[foodPos.y][foodPos.x] = Icon::Food;
   }
 }

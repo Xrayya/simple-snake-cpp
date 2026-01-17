@@ -1,47 +1,90 @@
 #include "input.hpp"
 #include <cstdio>
+#include <memory>
+#include <sys/select.h>
 #include <termios.h>
 #include <unistd.h>
 
-Direction InputHandler::poll() {
+InputEvent::InputEvent() { this->eventType = EventType::Input; }
+
+InputEvent InputEvent::Unknown() {
+  InputEvent event;
+  event.inputType = InputType::Uknown;
+  return event;
+}
+
+InputEventDirection::InputEventDirection(Direction direction) {
+  inputType = InputType::Direction;
+  this->direction = direction;
+}
+
+InputEventAction::InputEventAction(ActionType action) {
+  inputType = InputType::Action;
+  this->action = action;
+}
+
+InputHandler::InputHandler(int timeout_ms) : timeout_ms(timeout_ms) {}
+
+std::unique_ptr<InputEvent> InputHandler::poll() const {
   struct termios oldt, newt;
   tcgetattr(STDIN_FILENO, &oldt); // save old settings
   newt = oldt;
   newt.c_lflag &= ~(ICANON | ECHO); // disable canonical mode and echo
   tcsetattr(STDIN_FILENO, TCSANOW, &newt);
 
-  int ch = getchar();
+  fd_set set;
+  FD_ZERO(&set);
+  FD_SET(STDIN_FILENO, &set);
+
+  struct timeval timeout;
+  timeout.tv_sec = timeout_ms / 1000;
+  timeout.tv_usec = (timeout_ms % 1000) * 1000;
+
+  int rv = select(STDIN_FILENO + 1, &set, NULL, NULL, &timeout);
+
+  int ch = -1;
+  if (rv > 0) {
+    ch = getchar();
+  }
 
   tcsetattr(STDIN_FILENO, TCSANOW, &oldt); // restore old settings
+
+  if (ch == -1) {
+    return std::make_unique<InputEvent>(InputEvent::Unknown());
+  }
 
   // WASD keys
   switch (ch) {
   case 'w':
-    return Direction::Up;
+    return std::make_unique<InputEventDirection>(Direction::Up);
   case 'a':
-    return Direction::Left;
+    return std::make_unique<InputEventDirection>(Direction::Left);
   case 's':
-    return Direction::Down;
+    return std::make_unique<InputEventDirection>(Direction::Down);
   case 'd':
-    return Direction::Right;
+    return std::make_unique<InputEventDirection>(Direction::Right);
   // Arrow keys (escape sequence: 27, 91, [A/B/C/D])
   case 27: {
     if (getchar() == 91) {
       switch (getchar()) {
       case 'A':
-        return Direction::Up;
+        return std::make_unique<InputEventDirection>(Direction::Up);
       case 'B':
-        return Direction::Down;
+        return std::make_unique<InputEventDirection>(Direction::Down);
       case 'C':
-        return Direction::Right;
+        return std::make_unique<InputEventDirection>(Direction::Right);
       case 'D':
-        return Direction::Left;
+        return std::make_unique<InputEventDirection>(Direction::Left);
       }
     }
     break;
   }
+  case 'p':
+    return std::make_unique<InputEventAction>(ActionType::Pause);
+  case 'q':
+    return std::make_unique<InputEventAction>(ActionType::Quit);
   default:
     break;
   }
-  return Direction::None; // fallback
+  return std::make_unique<InputEvent>(InputEvent::Unknown());
 }

@@ -3,9 +3,11 @@
 #include <memory>
 
 BasicFoodFactory::BasicFoodFactory(int layoutWidth, int layoutHeight) {
-  foodLists.emplace_back(std::make_unique<Apple>(layoutWidth, layoutHeight));
+  foodCreators.push_back([layoutWidth, layoutHeight]() {
+    return std::make_unique<Apple>(layoutWidth, layoutHeight);
+  });
 }
 
 std::unique_ptr<IFood> BasicFoodFactory::generate() {
-  return foodLists.begin()->get()->clone();
+  return (*foodCreators.begin())();
 }

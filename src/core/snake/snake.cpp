@@ -1,49 +1,42 @@
 #include "snake.hpp"
+#include "core/fundamentals/direction.hpp"
+#include "core/fundamentals/position.hpp"
 #include <memory>
 
-SnakeNode::SnakeNode(Position pos) : pos(pos) {}
+SnakeNode::SnakeNode(const Position &pos) : pos(pos) {}
 
 bool SnakeNode::operator==(const SnakeNode &other) const {
   return pos == other.pos && backNode.get() == other.backNode.get() &&
          frontNode == other.frontNode;
 }
 
-Snake::Snake(Position pos) : head(std::make_unique<SnakeNode>(pos)) {
+Snake::Snake(const Position &pos, const Direction &direction)
+    : direction(direction), head(std::make_unique<SnakeNode>(pos)) {
   switch (direction) {
-  case Up:
+  case Direction::Up:
     head->backNode = std::make_unique<SnakeNode>(Position(pos.x, pos.y + 1));
     break;
-  case Down:
+  case Direction::Down:
     head->backNode = std::make_unique<SnakeNode>(Position(pos.x, pos.y - 1));
     break;
-  case Right:
+  case Direction::Right:
     head->backNode = std::make_unique<SnakeNode>(Position(pos.x - 1, pos.y));
     break;
-  case Left:
+  case Direction::Left:
     head->backNode = std::make_unique<SnakeNode>(Position(pos.x + 1, pos.y));
-    break;
-  case None:
     break;
   }
 
   head->backNode->frontNode = head.get();
   tail = head->backNode.get();
-
-  lastTailPosition = tail->pos;
 }
 
 const Position &Snake::getHeadPosition() const { return head.get()->pos; }
 
-void Snake::grow() {
-  tail->backNode = std::make_unique<SnakeNode>(lastTailPosition);
-  tail->backNode->frontNode = tail;
-  tail = tail->backNode.get();
-  length++;
-}
+void Snake::eat(const IFood &food) { pendingGrowth += food.eaterSizeEffect(); }
 
 void Snake::move() {
-  lastTailPosition.x = tail->pos.x;
-  lastTailPosition.y = tail->pos.y;
+  const auto tailPos = tail->pos;
 
   for (auto i = this->rbegin(); i != this->rend(); ++i) {
     auto &node = *i;
@@ -54,18 +47,27 @@ void Snake::move() {
   }
 
   switch (direction) {
-  case Up:
+  case Direction::Up:
     head->pos.y--;
     break;
-  case Down:
+  case Direction::Down:
     head->pos.y++;
     break;
-  case Left:
+  case Direction::Left:
     head->pos.x--;
     break;
-  case Right:
+  case Direction::Right:
     head->pos.x++;
     break;
+  }
+
+  if (pendingGrowth > 0) {
+    tail->backNode = std::make_unique<SnakeNode>(tailPos);
+    tail->backNode->frontNode = tail;
+    tail = tail->backNode.get();
+
+    pendingGrowth--;
+    length++;
   }
 }
 

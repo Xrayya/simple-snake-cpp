@@ -1,5 +1,6 @@
 #include "app/basic_food_factory.hpp"
 #include "core/game.hpp"
+#include "core/input.hpp"
 #include "core/renderer.hpp"
 #include <chrono>
 #include <cstdio>
@@ -8,19 +9,18 @@
 
 int main() {
   int width = 40, height = 40;
-  Game game(width, height, std::make_unique<BasicFoodFactory>(width, height));
+  InputHandler input;
+  Game game(width, height, std::make_unique<BasicFoodFactory>(width, height),
+            input);
   Renderer renderer(game);
 
-  constexpr int TARGET_FPS = 10;
+  constexpr int TARGET_FPS = 2;
   constexpr auto FRAME_TIME = std::chrono::milliseconds(1000 / TARGET_FPS);
 
   while (game.isRunning()) {
     auto frameStart = std::chrono::steady_clock::now();
 
     renderer.render();
-
-    // 1️⃣ Input
-    // Direction dir = input.poll();
 
     game.update();
 
