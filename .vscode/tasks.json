@@ -4,6 +4,12 @@
     {
       "label": "Setup CMake Debug/Dev",
       "type": "shell",
+      "command": "cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug",
+      "group": "build"
+    },
+    {
+      "label": "Setup FRESH CMake Debug/Dev",
+      "type": "shell",
       "command": "cmake --fresh -S . -B build -DCMAKE_BUILD_TYPE=Debug",
       "group": "build"
     },
@@ -14,12 +20,18 @@
       "group": "build"
     },
     {
-      "label": "Build Fresh Debug",
+      "label": "Update and Build Debug",
       "dependsOn": ["Setup CMake Debug/Dev", "Build Debug"],
       "group": "build"
     },
     {
       "label": "Setup CMake Release",
+      "type": "shell",
+      "command": "cmake -S . -B build-release -DCMAKE_BUILD_TYPE=Release",
+      "group": "build"
+    },
+    {
+      "label": "Setup FRESH CMake Release",
       "type": "shell",
       "command": "cmake --fresh -S . -B build-release -DCMAKE_BUILD_TYPE=Release",
       "group": "build"
@@ -31,7 +43,7 @@
       "group": "build"
     },
     {
-      "label": "Build Fresh Debug",
+      "label": "Update and Build Release",
       "dependsOn": ["Setup CMake Release", "Build Release"],
       "group": "build"
     }

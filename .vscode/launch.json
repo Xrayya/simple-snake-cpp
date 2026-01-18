@@ -8,7 +8,7 @@
       "program": "build/snake",
       "args": [],
       "cwd": "${workspaceFolder}",
-      "preLaunchTask": "Build Fresh",
+      "preLaunchTask": "Update and Build Debug",
       "console": "externalTerminal"
     },
     {
