@@ -71,55 +71,26 @@ void Snake::move() {
   }
 }
 
-Snake::Iterator::Iterator(SnakeNode *node, SnakeNode *tail)
-    : current(node), tail(tail) {}
-
-Snake::Iterator::reference Snake::Iterator::operator*() const {
-  return *current;
+Snake::SnakeIterator Snake::begin() {
+  return Snake::SnakeIterator(head.get(), tail);
 }
 
-Snake::Iterator::pointer Snake::Iterator::operator->() const { return current; }
-
-Snake::Iterator &Snake::Iterator::operator++() {
-  current = current->backNode.get();
-  return *this;
+Snake::SnakeIterator Snake::end() {
+  return Snake::SnakeIterator(tail->backNode.get(), tail);
 }
 
-Snake::Iterator Snake::Iterator::operator++(int) {
-  auto tmp = *this;
-  ++(*this);
-  return tmp;
+Snake::ReverseSnakeIterator Snake::rbegin() {
+  return ReverseSnakeIterator(end());
 }
 
-Snake::Iterator &Snake::Iterator::operator--() {
-  if (current == nullptr) {
-    current = tail;
-  } else {
-    current = current->frontNode;
-  }
-  return *this;
+Snake::ReverseSnakeIterator Snake::rend() {
+  return ReverseSnakeIterator(begin());
 }
 
-Snake::Iterator Snake::Iterator::operator--(int) {
-  auto tmp = *this;
-  --(*this);
-  return tmp;
 }
 
-bool Snake::Iterator::operator==(const Iterator &other) const {
-  return current == other.current;
 }
 
-bool Snake::Iterator::operator!=(const Iterator &other) const {
-  return current != other.current;
 }
 
-Snake::Iterator Snake::begin() { return Snake::Iterator(head.get(), tail); }
-
-Snake::Iterator Snake::end() {
-  return Snake::Iterator(tail->backNode.get(), tail);
 }
-
-Snake::ReverseIterator Snake::rbegin() { return ReverseIterator(end()); }
-
-Snake::ReverseIterator Snake::rend() { return ReverseIterator(begin()); }

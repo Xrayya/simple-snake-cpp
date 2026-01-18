@@ -2,6 +2,7 @@
 
 #include "core/food/food.hpp"
 #include "core/fundamentals/direction.hpp"
+#include "core/fundamentals/iterator.hpp"
 #include "core/fundamentals/movable.hpp"
 #include "core/fundamentals/position.hpp"
 #include <memory>
@@ -27,40 +28,19 @@ public:
   void eat(const IFood &food);
   void move() override;
 
-  class Iterator {
-  public:
-    using iterator_category = std::bidirectional_iterator_tag;
-    using value_type = SnakeNode;
-    using difference_type = std::ptrdiff_t;
-    using pointer = SnakeNode *;
-    using reference = SnakeNode &;
+  using SnakeIterator = Iterator<SnakeNode>;
 
-    explicit Iterator(SnakeNode *node, SnakeNode *tail);
+  SnakeIterator begin();
+  SnakeIterator end();
 
-    reference operator*() const;
-    pointer operator->() const;
+  using ReverseSnakeIterator = std::reverse_iterator<SnakeIterator>;
 
-    Iterator &operator++();
-    Iterator operator++(int);
+  ReverseSnakeIterator rbegin();
+  ReverseSnakeIterator rend();
 
-    Iterator &operator--();
-    Iterator operator--(int);
 
-    bool operator==(const Iterator &other) const;
-    bool operator!=(const Iterator &other) const;
 
-  private:
-    SnakeNode *current;
-    SnakeNode *tail;
-  };
 
-  Iterator begin();
-  Iterator end();
-
-  using ReverseIterator = std::reverse_iterator<Iterator>;
-
-  ReverseIterator rbegin();
-  ReverseIterator rend();
 
 protected:
   std::unique_ptr<SnakeNode> head;
