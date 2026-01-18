@@ -1,16 +1,12 @@
-#pragma once
-
-#include "game.hpp"
+#include "renderer.hpp"
 #include <string>
 #include <vector>
 
-class Renderer {
+class TUIRenderer : public IRenderer {
 public:
-  Renderer(const Game &game);
+  TUIRenderer(const Game &game);
 
-  const Game &game;
-
-  void render();
+  void render() override;
 
 private:
   void update();

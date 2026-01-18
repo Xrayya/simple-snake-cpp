@@ -1,7 +1,7 @@
 #include "app/basic_food_factory.hpp"
 #include "core/game.hpp"
 #include "core/input.hpp"
-#include "core/renderer.hpp"
+#include "core/renderer/tui_renderer.hpp"
 #include <chrono>
 #include <cstdio>
 #include <iostream>
@@ -12,7 +12,7 @@ int main() {
   InputHandler input;
   Game game(width, height, std::make_unique<BasicFoodFactory>(width, height),
             input);
-  Renderer renderer(game);
+  TUIRenderer renderer(game);
 
   constexpr int TARGET_FPS = 10;
   constexpr auto FRAME_TIME = std::chrono::milliseconds(1000 / TARGET_FPS);

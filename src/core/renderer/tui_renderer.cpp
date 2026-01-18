@@ -1,16 +1,16 @@
-#include "renderer.hpp"
-#include "icon.hpp"
+#include "tui_renderer.hpp"
+#include "core/icon.hpp"
 #include <iostream>
 #include <ostream>
 #include <string>
 #include <vector>
 
-Renderer::Renderer(const Game &game)
-    : game(game),
+TUIRenderer::TUIRenderer(const Game &game)
+    : IRenderer(game),
       layout(game.getHeight(), std::vector<std::string>(game.getWidth(), " ")) {
 }
 
-void Renderer::render() {
+void TUIRenderer::render() {
   update();
 
   // Clear terminal using ANSI escape codes
@@ -43,7 +43,7 @@ void Renderer::render() {
   std::cout << std::flush;
 }
 
-void Renderer::update() {
+void TUIRenderer::update() {
   // Clear layout
   for (int i = 0; i < game.getHeight(); i++) {
     for (int j = 0; j < game.getWidth(); j++) {

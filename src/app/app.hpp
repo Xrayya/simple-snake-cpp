@@ -1,7 +1,8 @@
 #pragma once
 
 #include "core/game.hpp"
-#include "core/renderer.hpp"
+#include "core/renderer/renderer.hpp"
+#include <memory>
 
 struct AppSpec {
   int width = 40, height = 40;
@@ -16,5 +17,5 @@ public:
 
 private:
   Game game;
-  Renderer renderer;
+  std::unique_ptr<IRenderer> renderer;
 };
