@@ -56,7 +56,8 @@ const std::vector<std::unique_ptr<IFood>> &Game::getAciveFoods() const {
 void Game::listenForInput() {
   auto event = inputHandler.poll();
   if (event->inputType == InputType::Direction) {
-    auto directionEvent = static_cast<InputEventDirection *>(event.get());
+    auto directionEvent =
+        static_cast<InputEventDirection *>(std::move(event).get());
     setSnakeDirection(directionEvent->direction);
   }
 }

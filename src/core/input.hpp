@@ -29,6 +29,7 @@ struct InputEventAction : InputEvent {
 class InputHandler {
 public:
   InputHandler() = default;
+  virtual ~InputHandler() = default;
   explicit InputHandler(int timeout_ms);
   std::unique_ptr<InputEvent> poll() const;
 
