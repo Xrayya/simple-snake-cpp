@@ -14,7 +14,7 @@ int main() {
             input);
   Renderer renderer(game);
 
-  constexpr int TARGET_FPS = 2;
+  constexpr int TARGET_FPS = 10;
   constexpr auto FRAME_TIME = std::chrono::milliseconds(1000 / TARGET_FPS);
 
   while (game.isRunning()) {
