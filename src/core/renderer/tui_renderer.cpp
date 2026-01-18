@@ -58,7 +58,7 @@ void TUIRenderer::update() {
   }
 
   // Update snake on layout
-  for (const auto &node : const_cast<Snake &>(game.getSnake())) {
+  for (const auto &node : game.getSnake()) {
     if (!node.frontNode) {
       layout[node.pos.y][node.pos.x] = Icon::Snake::Head;
     } else {
