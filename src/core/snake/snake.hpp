@@ -38,9 +38,15 @@ public:
   ReverseSnakeIterator rbegin();
   ReverseSnakeIterator rend();
 
+  using ConstSnakeIterator = Iterator<const SnakeNode>;
 
+  ConstSnakeIterator begin() const;
+  ConstSnakeIterator end() const;
 
+  using ConstReverseSnakeIterator = std::reverse_iterator<ConstSnakeIterator>;
 
+  ConstReverseSnakeIterator rbegin() const;
+  ConstReverseSnakeIterator rend() const;
 
 protected:
   std::unique_ptr<SnakeNode> head;

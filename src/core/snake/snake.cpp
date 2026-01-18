@@ -87,10 +87,18 @@ Snake::ReverseSnakeIterator Snake::rend() {
   return ReverseSnakeIterator(begin());
 }
 
+Snake::ConstSnakeIterator Snake::begin() const {
+  return Snake::ConstSnakeIterator(head.get(), tail);
 }
 
+Snake::ConstSnakeIterator Snake::end() const {
+  return Snake::ConstSnakeIterator(tail->backNode.get(), tail);
 }
 
+Snake::ConstReverseSnakeIterator Snake::rbegin() const {
+  return ConstReverseSnakeIterator(end());
 }
 
+Snake::ConstReverseSnakeIterator Snake::rend() const {
+  return ConstReverseSnakeIterator(begin());
 }
