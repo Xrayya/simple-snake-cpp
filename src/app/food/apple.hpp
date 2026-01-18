@@ -1,3 +1,5 @@
+#pragma once
+
 #include "core/food/food.hpp"
 
 class Apple : public IFood {
