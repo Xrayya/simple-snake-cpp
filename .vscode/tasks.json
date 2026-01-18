@@ -2,21 +2,37 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "Setup CMake",
+      "label": "Setup CMake Debug/Dev",
       "type": "shell",
-      "command": "bash \"-c mkdir -p build && cd build && cmake ..\"",
+      "command": "cmake --fresh -S . -B build -DCMAKE_BUILD_TYPE=Debug",
       "group": "build"
     },
     {
-      "label": "Build Project",
+      "label": "Build Debug",
       "type": "shell",
-      "command": "bash -c \"cd build && cmake --build .\"",
+      "command": "cmake --build build",
       "group": "build"
     },
     {
-      "label": "Build Fresh",
+      "label": "Build Fresh Debug",
+      "dependsOn": ["Setup CMake Debug/Dev", "Build Debug"],
+      "group": "build"
+    },
+    {
+      "label": "Setup CMake Release",
       "type": "shell",
-      "command": "bash -c \"cd build && cmake --fresh .. && cmake --build .\"",
+      "command": "cmake --fresh -S . -B build-release -DCMAKE_BUILD_TYPE=Release",
+      "group": "build"
+    },
+    {
+      "label": "Build Release",
+      "type": "shell",
+      "command": "cmake --build build-release",
+      "group": "build"
+    },
+    {
+      "label": "Build Fresh Debug",
+      "dependsOn": ["Setup CMake Release", "Build Release"],
       "group": "build"
     }
   ]
