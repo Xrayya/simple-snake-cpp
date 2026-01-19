@@ -49,7 +49,7 @@ Features, structure, and architecture are expected to evolve as I continue explo
 
 Before building the project, make sure you have the following installed:
 
-* **C++ compiler** with C++17 support or newer
+* **C++ compiler** with C++20 support or newer
 
   * GCC / Clang recommended
 * **CMake** ≥ 3.16
