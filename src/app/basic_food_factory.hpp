@@ -1,7 +1,6 @@
 #pragma once
 
-#include "core/food/food.hpp"
-#include "core/game.hpp"
+#include "core/food/food_factory.hpp"
 #include <functional>
 #include <memory>
 #include <vector>

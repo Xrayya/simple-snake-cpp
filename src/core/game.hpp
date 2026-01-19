@@ -1,7 +1,8 @@
 #pragma once
 
 #include "core/event.hpp"
-#include "core/input.hpp"
+#include "core/fundamentals/time.hpp"
+#include "core/input/input.hpp"
 #include "food/food_factory.hpp"
 #include "snake/snake.hpp"
 #include <memory>
@@ -11,7 +12,8 @@
 class Game {
 public:
   Game(int width, int height, std::unique_ptr<IFoodFactory> foodFactory,
-       const InputHandler &inputHandler);
+       std::unique_ptr<const IInputHandler> inputHandler,
+       const TimeContext &timeContext, int tickPerSecond);
 
   const int &getWidth() const;
   const int &getHeight() const;
@@ -28,7 +30,11 @@ protected:
   Snake snake;
   std::vector<std::unique_ptr<IFood>> activeFoods;
   std::unique_ptr<IFoodFactory> foodFactory;
-  const InputHandler &inputHandler;
+  std::unique_ptr<const IInputHandler> inputHandler;
+
+  const TimeContext &timeContext;
+  float tickInterval;
+  float tickAccumulator;
 
   void listenForInput();
   void handleEvents();

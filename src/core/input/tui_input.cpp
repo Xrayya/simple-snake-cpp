@@ -1,31 +1,9 @@
-#include "input.hpp"
-#include <cstdio>
-#include <memory>
-#include <sys/select.h>
+#include "tui_input.hpp"
 #include <termios.h>
-#include <unistd.h>
 
-InputEvent::InputEvent() { this->eventType = EventType::Input; }
+TUIInputHandler::TUIInputHandler(int timeout_ms) : timeout_ms(timeout_ms) {}
 
-InputEvent InputEvent::Unknown() {
-  InputEvent event;
-  event.inputType = InputType::Uknown;
-  return event;
-}
-
-InputEventDirection::InputEventDirection(Direction direction) {
-  inputType = InputType::Direction;
-  this->direction = direction;
-}
-
-InputEventAction::InputEventAction(ActionType action) {
-  inputType = InputType::Action;
-  this->action = action;
-}
-
-InputHandler::InputHandler(int timeout_ms) : timeout_ms(timeout_ms) {}
-
-std::unique_ptr<InputEvent> InputHandler::poll() const {
+std::unique_ptr<InputEvent> TUIInputHandler::poll() const {
   struct termios oldt, newt;
   tcgetattr(STDIN_FILENO, &oldt); // save old settings
   newt = oldt;

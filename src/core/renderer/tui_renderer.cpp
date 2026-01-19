@@ -1,5 +1,5 @@
 #include "tui_renderer.hpp"
-#include "core/icon.hpp"
+#include "icon.hpp"
 #include <iostream>
 #include <ostream>
 #include <string>

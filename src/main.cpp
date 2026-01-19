@@ -1,37 +1,29 @@
 #include "app/basic_food_factory.hpp"
 #include "core/game.hpp"
-#include "core/input.hpp"
-#include "core/renderer/tui_renderer.hpp"
-#include <chrono>
+#include "core/input/raylib_input.hpp"
+#include "core/renderer/raylib_renderer.hpp"
+#include "core/renderer/renderer.hpp"
 #include <cstdio>
 #include <iostream>
-#include <thread>
+#include <memory>
 
 int main() {
   int width = 40, height = 40;
-  InputHandler input;
-  Game game(width, height, std::make_unique<BasicFoodFactory>(width, height),
-            input);
-  TUIRenderer renderer(game);
+  TimeContext timeContext;
 
-  constexpr int TARGET_FPS = 10;
-  constexpr auto FRAME_TIME = std::chrono::milliseconds(1000 / TARGET_FPS);
+  std::unique_ptr<IInputHandler> input = std::make_unique<RaylibInputHandler>();
+  std::unique_ptr<IFoodFactory> foodFactory =
+      std::make_unique<BasicFoodFactory>(width, height);
+  Game game(width, height, std::move(foodFactory), std::move(input),
+            timeContext, 8);
+
+  std::unique_ptr<IRenderer> renderer =
+      std::make_unique<RaylibRenderer>(game, 30);
 
   while (game.isRunning()) {
-    auto frameStart = std::chrono::steady_clock::now();
-
-    renderer.render();
-
+    timeContext.update();
+    renderer->render();
     game.update();
-
-    // 4️⃣ Frame pacing
-    auto frameEnd = std::chrono::steady_clock::now();
-    auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(
-        frameEnd - frameStart);
-
-    if (elapsed < FRAME_TIME) {
-      std::this_thread::sleep_for(FRAME_TIME - elapsed);
-    }
   }
 
   std::cout << std::endl << "Press Enter to exit..." << std::endl;

@@ -3,10 +3,13 @@
 #include <memory>
 
 Game::Game(int width, int height, std::unique_ptr<IFoodFactory> foodFactory,
-           const InputHandler &inputHandler)
-    : width(width), height(height),
+           std::unique_ptr<const IInputHandler> inputHandler,
+           const TimeContext &timeContext, int tickPerSecond)
+    : width(width), height(height), score(0),
       snake(Position(width / 2, height / 2), Direction::Left),
-      foodFactory(std::move(foodFactory)), inputHandler(inputHandler) {
+      foodFactory(std::move(foodFactory)),
+      inputHandler(std::move(inputHandler)), timeContext(timeContext),
+      tickInterval(1.0f / tickPerSecond), tickAccumulator(0.0f) {
   spawnFood();
 }
 
@@ -15,7 +18,13 @@ const int &Game::getWidth() const { return width; }
 const int &Game::getHeight() const { return height; }
 
 void Game::update() {
+  tickAccumulator += timeContext.getDeltaTime();
   listenForInput();
+
+  if (tickAccumulator < tickInterval) {
+    return;
+  }
+
   checkFoodEaten();
   handleEvents();
 
@@ -23,6 +32,8 @@ void Game::update() {
     food->update();
   }
   snake.move();
+
+  tickAccumulator -= tickInterval;
 }
 
 bool Game::isRunning() const {
@@ -54,7 +65,7 @@ const std::vector<std::unique_ptr<IFood>> &Game::getAciveFoods() const {
 }
 
 void Game::listenForInput() {
-  auto event = inputHandler.poll();
+  auto event = inputHandler->poll();
   if (event->inputType == InputType::Direction) {
     auto directionEvent =
         static_cast<InputEventDirection *>(std::move(event).get());
