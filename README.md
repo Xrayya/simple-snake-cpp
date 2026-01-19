@@ -105,7 +105,7 @@ cmake -S . -B build-release -DCMAKE_BUILD_TYPE=Release
 cmake --build build-release
 ```
 
-The resulting binary will be generated inside the `build/` and/or `build-release` directory.
+The resulting binary will be generated inside the `build/` and/or `build-release/` directory.
 
 ---
 
