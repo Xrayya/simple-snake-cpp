@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.16...4.99)
 
+include(cmake/PreferClang.cmake)
+
 project(
     snake
     VERSION 0.1
@@ -28,37 +30,71 @@ target_include_directories(snake PRIVATE src)
 # ========================
 # Warnings (always on)
 # ========================
-target_compile_options(snake PRIVATE
-    -Wall
-    -Wextra
-    -Wpedantic
+function(enable_strict_warnings target)
+    if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+        message(STATUS "Using Clang warning set")
 
-    -Wdeprecated-copy
-    -Wdangling
-    -Wunused-private-field
-    -Wshadow
-    -Wnon-virtual-dtor
-    -Wweak-vtables
-    -Woverloaded-virtual
-    -Wsuggest-override
-    -Wlifetime
-    -Wslicing
+        target_compile_options(${target} PRIVATE
+            -Wall
+            -Wextra
+            -Wpedantic
 
-    -Werror=sign-compare
-    -Werror=return-type
-    -Werror=unreachable-code
-    -Werror=missing-field-initializers
-    -Werror=conversion
-    -Werror=missing-field-initializers
-    -Werror=deprecated-copy
-    -Werror=dangling
-    -Werror=non-virtual-dtor
-    -Werror=weak-vtables
-    -Werror=overloaded-virtual
-    -Werror=suggest-override
-    -Werror=lifetime
-    -Werror=slicing
-)
+            -Wdeprecated-copy
+            -Wdangling
+            -Wunused-private-field
+            -Wshadow
+            -Wnon-virtual-dtor
+            -Woverloaded-virtual
+            -Wsuggest-override
+            -Wlifetime
+            -Wslicing
+
+            -Werror=sign-compare
+            -Werror=return-type
+            -Werror=unreachable-code
+            -Werror=missing-field-initializers
+            -Werror=conversion
+            -Werror=deprecated-copy
+            -Werror=dangling
+            -Werror=non-virtual-dtor
+            -Werror=overloaded-virtual
+            -Werror=suggest-override
+            -Werror=lifetime
+            -Werror=slicing
+        )
+
+    elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+        message(STATUS "Using GCC warning set")
+
+        target_compile_options(${target} PRIVATE
+            -Wall
+            -Wextra
+            -Wpedantic
+
+            -Wshadow
+            -Wnon-virtual-dtor
+            -Woverloaded-virtual
+            -Wsuggest-override
+            -Wconversion
+            -Wsign-compare
+            -Wduplicated-cond
+            -Wduplicated-branches
+            -Wlogical-op
+            -Wuseless-cast
+            -Wnull-dereference
+            -Wold-style-cast
+
+            -Werror=sign-compare
+            -Werror=return-type
+            -Werror=conversion
+            -Werror=non-virtual-dtor
+            -Werror=overloaded-virtual
+            -Werror=suggest-override
+        )
+    endif()
+endfunction()
+
+enable_strict_warnings(snake)
 
 # ========================
 # Debug-only flags
