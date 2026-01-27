@@ -4,9 +4,13 @@ Checks: >
   modernize-*,
   performance-*,
   cppcoreguidelines-*,
-  readability-*
+  readability-*,
+  -cppcoreguidelines-avoid-magic-numbers,
+  -readability-magic-numbers,
 
 WarningsAsErrors: >
   clang-analyzer-*,
   bugprone-*,
   cppcoreguidelines-*,
+  -cppcoreguidelines-avoid-magic-numbers,
+  -readability-magic-numbers,
