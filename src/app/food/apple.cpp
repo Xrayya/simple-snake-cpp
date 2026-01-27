@@ -4,14 +4,14 @@
 Apple::Apple(int layoutWidth, int layoutHeight)
     : pos(Position::random(layoutWidth, layoutHeight)) {}
 
-const Position Apple::position() { return pos; }
+auto Apple::position() -> Position { return pos; }
 
 void Apple::update() {}
 
-int Apple::additionalScore() { return 1; }
+auto Apple::additionalScore() -> int { return 1; }
 
-std::unique_ptr<IFood> Apple::clone() const {
+auto Apple::clone() const -> std::unique_ptr<IFood> {
   return std::make_unique<Apple>(*this);
 }
 
-int Apple::eaterSizeEffect() const { return 1; }
+auto Apple::eaterSizeEffect() const -> int { return 1; }

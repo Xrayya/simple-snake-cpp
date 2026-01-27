@@ -4,8 +4,14 @@
 
 class RaylibRenderer : public IRenderer {
 public:
-  RaylibRenderer(const Game &game, int cellSize);
-  ~RaylibRenderer();
+  RaylibRenderer(std::shared_ptr<Game>, int cellSize);
+
+  RaylibRenderer(const RaylibRenderer &) = default;
+  RaylibRenderer(RaylibRenderer &&) = delete;
+  auto operator=(const RaylibRenderer &) -> RaylibRenderer & = default;
+  auto operator=(RaylibRenderer &&) -> RaylibRenderer & = delete;
+
+  ~RaylibRenderer() override;
 
   void render() override;
 

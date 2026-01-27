@@ -5,7 +5,7 @@
 
 SnakeNode::SnakeNode(const Position &pos) : pos(pos) {}
 
-bool SnakeNode::operator==(const SnakeNode &other) const {
+auto SnakeNode::operator==(const SnakeNode &other) const -> bool {
   return pos == other.pos && backNode.get() == other.backNode.get() &&
          frontNode == other.frontNode;
 }
@@ -31,7 +31,25 @@ Snake::Snake(const Position &pos, const Direction &direction)
   tail = head->backNode.get();
 }
 
-const Position &Snake::getHeadPosition() const { return head.get()->pos; }
+auto Snake::getLength() const -> int { return length; }
+
+auto Snake::setDirection(const Direction &newDirection) -> void {
+  direction = newDirection;
+}
+
+auto Snake::getDirection() const -> Direction { return direction; }
+
+auto Snake::getHead() const -> const std::unique_ptr<SnakeNode> & {
+  return head;
+}
+
+auto Snake::setHead(std::unique_ptr<SnakeNode> newHead) -> void {
+  head = std::move(newHead);
+}
+
+auto Snake::getTail() const -> SnakeNode * { return tail; }
+
+auto Snake::setTail(SnakeNode *newTail) -> void { tail = newTail; }
 
 void Snake::eat(const IFood &food) { pendingGrowth += food.eaterSizeEffect(); }
 
@@ -40,7 +58,7 @@ void Snake::move() {
 
   for (auto i = this->rbegin(); i != this->rend(); ++i) {
     auto &node = *i;
-    if (node.frontNode) {
+    if (node.frontNode != nullptr) {
       node.pos.x = node.frontNode->pos.x;
       node.pos.y = node.frontNode->pos.y;
     }
@@ -71,34 +89,38 @@ void Snake::move() {
   }
 }
 
-Snake::SnakeIterator Snake::begin() {
-  return Snake::SnakeIterator(head.get(), tail);
+auto Snake::begin() -> Snake::SnakeIterator {
+  return Snake::SnakeIterator(
+      IteratorConstructorParams<SnakeNode>{.node = head.get(), .tail = tail});
 }
 
-Snake::SnakeIterator Snake::end() {
-  return Snake::SnakeIterator(tail->backNode.get(), tail);
+auto Snake::end() -> Snake::SnakeIterator {
+  return Snake::SnakeIterator(IteratorConstructorParams<SnakeNode>{
+      .node = tail->backNode.get(), .tail = tail});
 }
 
-Snake::ReverseSnakeIterator Snake::rbegin() {
+auto Snake::rbegin() -> Snake::ReverseSnakeIterator {
   return ReverseSnakeIterator(end());
 }
 
-Snake::ReverseSnakeIterator Snake::rend() {
+auto Snake::rend() -> Snake::ReverseSnakeIterator {
   return ReverseSnakeIterator(begin());
 }
 
-Snake::ConstSnakeIterator Snake::begin() const {
-  return Snake::ConstSnakeIterator(head.get(), tail);
+auto Snake::begin() const -> Snake::ConstSnakeIterator {
+  return ConstSnakeIterator(IteratorConstructorParams<const SnakeNode>{
+      .node = head.get(), .tail = tail});
 }
 
-Snake::ConstSnakeIterator Snake::end() const {
-  return Snake::ConstSnakeIterator(tail->backNode.get(), tail);
+auto Snake::end() const -> Snake::ConstSnakeIterator {
+  return Snake::ConstSnakeIterator(IteratorConstructorParams<const SnakeNode>{
+      .node = tail->backNode.get(), .tail = tail});
 }
 
-Snake::ConstReverseSnakeIterator Snake::rbegin() const {
+auto Snake::rbegin() const -> Snake::ConstReverseSnakeIterator {
   return ConstReverseSnakeIterator(end());
 }
 
-Snake::ConstReverseSnakeIterator Snake::rend() const {
+auto Snake::rend() const -> Snake::ConstReverseSnakeIterator {
   return ConstReverseSnakeIterator(begin());
 }

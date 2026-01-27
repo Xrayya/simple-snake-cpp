@@ -1,8 +1,8 @@
 #pragma once
 
-#include "input.hpp"
+#include "core/input/input.hpp"
 
-class RaylibInputHandler : public IInputHandler {
+class RaylibInputHandler : public InputHandler {
 public:
-  std::unique_ptr<InputEvent> poll() const override;
+  [[nodiscard]] auto poll() const -> std::unique_ptr<event::Input> override;
 };

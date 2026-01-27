@@ -1,13 +1,16 @@
 #include "position.hpp"
 #include "core/utils/utils.hpp"
 
-Position::Position(const int &x, const int &y) : x(x), y(y) {}
-
-bool Position::operator==(const Position &other) const {
+auto Position::operator==(const Position &other) const -> bool {
   return x == other.x && y == other.y;
 }
 
-Position Position::random(const int &layoutWidth, const int &layoutHeight) {
+auto Position::random(const int &layoutWidth, const int &layoutHeight)
+    -> Position {
   return Position(generateRandomNum<int>(0, layoutWidth - 1),
                   generateRandomNum<int>(0, layoutHeight - 1));
+}
+
+auto ContinousPosition::operator==(const ContinousPosition &other) const -> bool {
+  return x == other.x && y == other.y;
 }

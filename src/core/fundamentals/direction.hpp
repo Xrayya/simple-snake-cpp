@@ -1,5 +1,8 @@
 #pragma once
 
-enum class Direction { Up, Down, Left, Right };
+#include <cstdint>
+#include <utility>
 
-bool isOppositeDirection(const Direction &a, const Direction &b);
+enum class Direction : std::uint8_t { Up, Down, Left, Right };
+
+auto isOppositeDirection(std::pair<Direction, Direction> directions) -> bool;

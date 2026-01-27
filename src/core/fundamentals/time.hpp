@@ -5,11 +5,12 @@
 class TimeContext {
 public:
   TimeContext();
-  float getDeltaTime() const;
-  float getTotalTime() const;
+  [[nodiscard]] auto getDeltaTime() const -> float;
+  [[nodiscard]] auto getTotalTime() const -> float;
 
-  void reset();
-  void update();
+  auto reset() -> void;
+  auto update() -> void;
+
 private:
   float deltaTime;
   float totalTime;

@@ -1,25 +1,25 @@
 #include "game.hpp"
 #include "core/fundamentals/direction.hpp"
 #include <memory>
+#include <utility>
 
 Game::Game(int width, int height, std::unique_ptr<IFoodFactory> foodFactory,
-           std::unique_ptr<const IInputHandler> inputHandler,
            const TimeContext &timeContext, int tickPerSecond)
     : width(width), height(height), score(0),
       snake(Position(width / 2, height / 2), Direction::Left),
-      foodFactory(std::move(foodFactory)),
-      inputHandler(std::move(inputHandler)), timeContext(timeContext),
-      tickInterval(1.0f / tickPerSecond), tickAccumulator(0.0f) {
+      foodFactory(std::move(foodFactory)), timeContext(timeContext),
+      tickInterval(1.0F / static_cast<float>(tickPerSecond)),
+      tickAccumulator(0.0F) {
   spawnFood();
 }
 
-const int &Game::getWidth() const { return width; }
+auto Game::getWidth() const -> const int & { return width; }
 
-const int &Game::getHeight() const { return height; }
+auto Game::getHeight() const -> const int & { return height; }
 
 void Game::update() {
   tickAccumulator += timeContext.getDeltaTime();
-  listenForInput();
+  handleInput();
 
   if (tickAccumulator < tickInterval) {
     return;
@@ -36,53 +36,77 @@ void Game::update() {
   tickAccumulator -= tickInterval;
 }
 
-bool Game::isRunning() const {
-  const auto &snakeHeadPos = snake.getHeadPosition();
+auto Game::isRunning() const -> bool {
+  const auto &snakeHeadPos = snake.getHead()->pos;
 
   // Check collision with self
-  for (const auto &node : const_cast<Snake &>(snake)) {
-    if (node.pos == snakeHeadPos &&
-        node != *const_cast<Snake &>(snake).begin()) {
+  for (const auto &node : snake) {
+    if (node.pos == snakeHeadPos && node != *snake.begin()) {
       return false;
     }
   }
 
   // Check collision with boundaries
-  if (snakeHeadPos.x < 0 || snakeHeadPos.y < 0 || snakeHeadPos.y >= height ||
-      snakeHeadPos.x >= width) {
-    return false;
-  }
-
-  return true;
+  return snakeHeadPos.x >= 0 && snakeHeadPos.y >= 0 &&
+         snakeHeadPos.y < height && snakeHeadPos.x < width;
 }
 
-const int &Game::getScore() const { return score; }
+auto Game::getScore() const -> const int & { return score; }
 
-const Snake &Game::getSnake() const { return snake; }
+auto Game::getSnake() const -> const Snake & { return snake; }
 
-const std::vector<std::unique_ptr<IFood>> &Game::getAciveFoods() const {
+auto Game::getAciveFoods() const
+    -> const std::vector<std::unique_ptr<IFood>> & {
   return activeFoods;
 }
 
-void Game::listenForInput() {
-  auto event = inputHandler->poll();
-  if (event->inputType == InputType::Direction) {
-    auto directionEvent =
-        static_cast<InputEventDirection *>(std::move(event).get());
-    setSnakeDirection(directionEvent->direction);
+auto Game::submitInputEvent(std::unique_ptr<event::Input> inputEvent) -> void {
+  pendingInput = std::move(inputEvent);
+}
+
+auto Game::handleInput() -> void {
+  if (pendingInput) {
+    const auto &keyInput = dynamic_cast<event::KeyInput *>(pendingInput.get());
+
+    if (keyInput == nullptr) {
+      return;
+    }
+
+    switch (keyInput->key_code_) {
+    case KeyCode::W:
+    case KeyCode::ArrowUp:
+      setSnakeDirection(Direction::Up);
+      break;
+    case KeyCode::S:
+    case KeyCode::ArrowDown:
+      setSnakeDirection(Direction::Down);
+      break;
+    case KeyCode::A:
+    case KeyCode::ArrowLeft:
+      setSnakeDirection(Direction::Left);
+      break;
+    case KeyCode::D:
+    case KeyCode::ArrowRight:
+      setSnakeDirection(Direction::Right);
+      break;
+    default:
+      break;
+    }
+
+    pendingInput.reset();
   }
 }
 
 void Game::setSnakeDirection(Direction direction) {
-  if (isOppositeDirection(snake.direction, direction)) {
+  if (isOppositeDirection(std::make_pair(snake.getDirection(), direction))) {
     return;
   }
 
-  snake.direction = direction;
+  snake.setDirection(direction);
 }
 
 void Game::checkFoodEaten() {
-  const auto &snakeHeadPos = snake.getHeadPosition();
+  const auto &snakeHeadPos = snake.getHead()->pos;
 
   for (auto it = activeFoods.begin(); it != activeFoods.end(); ++it) {
     if ((*it)->position() == snakeHeadPos) {
@@ -117,7 +141,7 @@ void Game::handleEvents() {
     const auto &gameEvent = eventQueue.front();
     switch (gameEvent->gameEventType) {
     case GameEventType::FoodEaten: {
-      const auto &ateFoodEvent = static_cast<FoodEatenEvent &>(*gameEvent);
+      const auto &ateFoodEvent = dynamic_cast<FoodEatenEvent &>(*gameEvent);
       snake.eat(*ateFoodEvent.food);
       score += ateFoodEvent.food->additionalScore();
       eventQueue.emplace(
@@ -132,10 +156,8 @@ void Game::handleEvents() {
   }
 }
 
-Game::GameEvent::GameEvent(const GameEventType &gameEventType) {
-  eventType = EventType::Game;
-  this->gameEventType = gameEventType;
-}
+Game::GameEvent::GameEvent(const GameEventType &gameEventType)
+    : gameEventType(gameEventType) {}
 
 Game::FoodEatenEvent::FoodEatenEvent(std::unique_ptr<IFood> food)
     : GameEvent(GameEventType::FoodEaten), food(std::move(food)) {}

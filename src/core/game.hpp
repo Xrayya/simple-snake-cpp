@@ -1,10 +1,11 @@
 #pragma once
 
-#include "core/event.hpp"
+#include "core/fundamentals/event.hpp"
 #include "core/fundamentals/time.hpp"
-#include "core/input/input.hpp"
+#include "core/input/input_event.hpp"
 #include "food/food_factory.hpp"
 #include "snake/snake.hpp"
+#include <cstdint>
 #include <memory>
 #include <queue>
 #include <vector>
@@ -12,39 +13,41 @@
 class Game {
 public:
   Game(int width, int height, std::unique_ptr<IFoodFactory> foodFactory,
-       std::unique_ptr<const IInputHandler> inputHandler,
        const TimeContext &timeContext, int tickPerSecond);
 
-  const int &getWidth() const;
-  const int &getHeight() const;
+  [[nodiscard]] auto getWidth() const -> const int &;
+  [[nodiscard]] auto getHeight() const -> const int &;
 
   void update();
-  bool isRunning() const;
-  const int &getScore() const;
-  const Snake &getSnake() const;
-  const std::vector<std::unique_ptr<IFood>> &getAciveFoods() const;
+  [[nodiscard]] auto isRunning() const -> bool;
+  [[nodiscard]] auto getScore() const -> const int &;
+  [[nodiscard]] auto getSnake() const -> const Snake &;
+  [[nodiscard]] auto getAciveFoods() const
+      -> const std::vector<std::unique_ptr<IFood>> &;
 
-protected:
+  void submitInputEvent(std::unique_ptr<event::Input> inputEvent);
+
+private:
   int width, height;
   int score;
   Snake snake;
   std::vector<std::unique_ptr<IFood>> activeFoods;
   std::unique_ptr<IFoodFactory> foodFactory;
-  std::unique_ptr<const IInputHandler> inputHandler;
+  std::unique_ptr<event::Input> pendingInput;
 
   const TimeContext &timeContext;
   float tickInterval;
   float tickAccumulator;
 
-  void listenForInput();
+  void handleInput();
   void handleEvents();
   void setSnakeDirection(Direction direction);
   void spawnFood();
   void checkFoodEaten();
 
-  enum class GameEventType { RequestSpawnFood, FoodEaten };
+  enum class GameEventType : std::uint8_t { RequestSpawnFood, FoodEaten };
 
-  class GameEvent : Event {
+  class GameEvent : event::Event {
   public:
     GameEvent(const GameEventType &gameEventType);
     GameEventType gameEventType;

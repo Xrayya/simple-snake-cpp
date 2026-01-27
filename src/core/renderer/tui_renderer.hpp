@@ -6,7 +6,7 @@
 
 class TUIRenderer : public IRenderer {
 public:
-  TUIRenderer(const Game &game);
+  TUIRenderer(std::shared_ptr<Game> game);
 
   void render() override;
 

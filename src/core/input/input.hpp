@@ -1,33 +1,18 @@
 #pragma once
 
-#include "core/event.hpp"
-#include "core/fundamentals/direction.hpp"
+#include "core/input/input_event.hpp"
 #include <memory>
 
-enum class InputType { Uknown, Direction, Action };
-
-enum class ActionType { Pause, Quit };
-
-struct InputEvent : Event {
-  InputType inputType;
-  static InputEvent Unknown();
-
-protected:
-  InputEvent();
-};
-
-struct InputEventDirection : InputEvent {
-  InputEventDirection(Direction direction);
-  Direction direction;
-};
-
-struct InputEventAction : InputEvent {
-  InputEventAction(ActionType action);
-  ActionType action;
-};
-
-class IInputHandler {
+class InputHandler {
 public:
-  virtual ~IInputHandler() = default;
-  virtual std::unique_ptr<InputEvent> poll() const = 0;
+  InputHandler() = default;
+
+  InputHandler(const InputHandler &) = default;
+  InputHandler(InputHandler &&) = delete;
+  auto operator=(const InputHandler &) -> InputHandler & = default;
+  auto operator=(InputHandler &&) -> InputHandler & = delete;
+
+  virtual ~InputHandler() = default;
+
+  [[nodiscard]] virtual auto poll() const -> std::unique_ptr<event::Input> = 0;
 };

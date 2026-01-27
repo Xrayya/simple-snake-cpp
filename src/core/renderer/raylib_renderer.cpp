@@ -1,10 +1,12 @@
 #include "raylib_renderer.hpp"
+#include <format>
+#include <memory>
 #include <raylib.h>
 
-RaylibRenderer::RaylibRenderer(const Game &game, int cellSize)
-    : IRenderer(game), cellSize(cellSize) {
+RaylibRenderer::RaylibRenderer(std::shared_ptr<Game> game, int cellSize)
+    : IRenderer(std::move(game)), cellSize(cellSize) {
 
-  InitWindow(game.getWidth() * cellSize, game.getHeight() * cellSize + 40,
+  InitWindow(game_->getWidth() * cellSize, (game_->getHeight() * cellSize) + 40,
              "Snake");
   SetTargetFPS(60);
 }
@@ -16,17 +18,19 @@ void RaylibRenderer::render() {
   ClearBackground(BLACK);
 
   // Draw score
-  DrawText(TextFormat("Score: %d", game.getScore()), 10, 10, 20, WHITE);
+  DrawText(std::format("Score: {}", game_->getScore()).c_str(), 10, 10, 20,
+           WHITE);
 
   // Draw foods
-  for (const auto &food : game.getAciveFoods()) {
-    auto p = food->position();
-    DrawRectangle(p.x * cellSize, p.y * cellSize + 40, cellSize, cellSize, RED);
+  for (const auto &food : game_->getAciveFoods()) {
+    auto pos = food->position();
+    DrawRectangle(pos.x * cellSize, (pos.y * cellSize) + 40, cellSize, cellSize,
+                  RED);
   }
 
   // Draw snake
-  for (const auto &node : game.getSnake()) {
-    DrawRectangle(node.pos.x * cellSize, node.pos.y * cellSize + 40, cellSize,
+  for (const auto &node : game_->getSnake()) {
+    DrawRectangle(node.pos.x * cellSize, (node.pos.y * cellSize) + 40, cellSize,
                   cellSize, GREEN);
   }
 

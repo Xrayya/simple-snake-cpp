@@ -4,10 +4,15 @@ class Position {
 public:
   int x, y;
 
-  Position(const int &x, const int &y);
-  Position() = default;
+  auto operator==(const Position &other) const -> bool;
 
-  bool operator==(const Position &other) const;
+  static auto random(const int &layoutWidth, const int &layoutHeight)
+      -> Position;
+};
 
-  static Position random(const int &layoutWidth, const int &layoutHeight);
+class ContinousPosition {
+public:
+  float x, y;
+
+  auto operator==(const ContinousPosition &other) const -> bool;
 };

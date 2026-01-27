@@ -6,11 +6,11 @@ class Apple : public IFood {
 public:
   Apple(int layoutWidth, int layoutHeight);
 
-  const Position position() override;
+  auto position() -> Position override;
   void update() override;
-  int additionalScore() override;
-  std::unique_ptr<IFood> clone() const override;
-  int eaterSizeEffect() const override;
+  auto additionalScore() -> int override;
+  [[nodiscard]] auto clone() const -> std::unique_ptr<IFood> override;
+  [[nodiscard]] auto eaterSizeEffect() const -> int override;
 
 private:
   Position pos;

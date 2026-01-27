@@ -1,11 +1,15 @@
 #include "direction.hpp"
 
-bool isOppositeDirection(const Direction &a, const Direction &b) {
-  switch (a) {
-  case Direction::Up:    return b == Direction::Down;
-  case Direction::Down:  return b == Direction::Up;
-  case Direction::Left:  return b == Direction::Right;
-  case Direction::Right: return b == Direction::Left;
+auto isOppositeDirection(std::pair<Direction, Direction> directions) -> bool {
+  switch (directions.first) {
+  case Direction::Up:
+    return directions.second == Direction::Down;
+  case Direction::Down:
+    return directions.second == Direction::Up;
+  case Direction::Left:
+    return directions.second == Direction::Right;
+  case Direction::Right:
+    return directions.second == Direction::Left;
   }
   return false;
 }

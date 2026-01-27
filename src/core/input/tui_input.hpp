@@ -1,11 +1,11 @@
 #pragma once
 
-#include "input.hpp"
+#include "core/input/input.hpp"
 
-class TUIInputHandler : public IInputHandler {
+class TUIInputHandler : public InputHandler {
 public:
   TUIInputHandler(int timeout_ms);
-  std::unique_ptr<InputEvent> poll() const override;
+  [[nodiscard]] auto poll() const -> std::unique_ptr<event::Input> override;
 
 private:
   int timeout_ms;

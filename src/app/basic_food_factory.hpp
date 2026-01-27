@@ -8,7 +8,7 @@
 class BasicFoodFactory : public IFoodFactory {
 public:
   BasicFoodFactory(int layoutWidth, int layoutHeight);
-  std::unique_ptr<IFood> generate() override;
+  auto generate() -> std::unique_ptr<IFood> override;
 
 private:
   using FoodCreatorFunc = std::function<std::unique_ptr<IFood>()>;
