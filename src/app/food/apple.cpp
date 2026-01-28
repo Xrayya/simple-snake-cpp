@@ -1,17 +1,27 @@
-#include "apple.hpp"
-#include "core/fundamentals/position.hpp"
+#include "app/food/apple.hpp"
 
-Apple::Apple(int layoutWidth, int layoutHeight)
-    : pos(Position::random(layoutWidth, layoutHeight)) {}
+namespace actor {
+Apple::Apple(const Position &pos) : pos_(pos) {}
 
-auto Apple::position() -> Position { return pos; }
+auto Apple::getCentralPosition() const -> const Position & { return pos_; }
 
-void Apple::update() {}
+auto Apple::setCentralPosition(const Position &pos) -> void { pos_ = pos; }
 
-auto Apple::additionalScore() -> int { return 1; }
-
-auto Apple::clone() const -> std::unique_ptr<IFood> {
-  return std::make_unique<Apple>(*this);
+auto Apple::getOccupiedPositions() const -> std::vector<Position> {
+  return {pos_};
 }
 
-auto Apple::eaterSizeEffect() const -> int { return 1; }
+auto Apple::onUpdate() -> void {}
+
+auto Apple::getAdditionalScore() const -> const int & {
+  static const int score = 1;
+  return score;
+}
+
+auto Apple::getEaterSizeEffect() const -> const int & {
+  static const int sizeEffect = 1;
+  return sizeEffect;
+}
+
+auto Apple::onConsume() -> bool { return true; }
+} // namespace actor

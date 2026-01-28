@@ -1,13 +1,15 @@
-#include "basic_food_factory.hpp"
-#include "food/apple.hpp"
+#include "app/basic_food_factory.hpp"
+#include "app/food/apple.hpp"
+#include "game_core/position.hpp"
 #include <memory>
 
-BasicFoodFactory::BasicFoodFactory(int layoutWidth, int layoutHeight) {
-  foodCreators.emplace_back([layoutWidth, layoutHeight]() -> std::__detail::__unique_ptr_t<Apple> {
-    return std::make_unique<Apple>(layoutWidth, layoutHeight);
-  });
+BasicFoodFactory::BasicFoodFactory(const Layout &layout) {
+  foodCreators.emplace_back(
+      [layout]() -> std::__detail::__unique_ptr_t<actor::Apple> {
+        return std::make_unique<actor::Apple>(Position::random(layout));
+      });
 }
 
-auto BasicFoodFactory::generate() -> std::unique_ptr<IFood> {
+auto BasicFoodFactory::generate() -> std::unique_ptr<actor::Consumable> {
   return (*foodCreators.begin())();
 }

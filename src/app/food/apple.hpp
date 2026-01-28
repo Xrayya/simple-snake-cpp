@@ -1,17 +1,27 @@
 #pragma once
 
-#include "core/food/food.hpp"
+#include "game_core/consumable.hpp"
 
-class Apple : public IFood {
+namespace actor {
+class Apple : public Consumable {
 public:
-  Apple(int layoutWidth, int layoutHeight);
+  Apple(const Position &pos);
 
-  auto position() -> Position override;
-  void update() override;
-  auto additionalScore() -> int override;
-  [[nodiscard]] auto clone() const -> std::unique_ptr<IFood> override;
-  [[nodiscard]] auto eaterSizeEffect() const -> int override;
+  [[nodiscard]] auto getCentralPosition() const -> const Position & override;
+  auto setCentralPosition(const Position &pos) -> void override;
+
+  [[nodiscard]] auto getOccupiedPositions() const
+      -> std::vector<Position> override;
+
+  auto onUpdate() -> void override;
+
+  [[nodiscard]] auto getAdditionalScore() const -> const int & override;
+
+  [[nodiscard]] auto getEaterSizeEffect() const -> const int & override;
+
+  auto onConsume() -> bool override;
 
 private:
-  Position pos;
+  Position pos_;
 };
+} // namespace actor

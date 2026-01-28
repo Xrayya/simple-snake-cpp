@@ -1,7 +1,7 @@
 #pragma once
 
-#include "core/game.hpp"
-#include "core/renderer/renderer.hpp"
+#include "game_core/game.hpp"
+#include "game_core/renderer/renderer.hpp"
 #include <memory>
 
 struct AppSpec {
