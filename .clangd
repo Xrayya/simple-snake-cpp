@@ -1,0 +1,59 @@
+CompileFlags:
+  Add: [
+      # ===== Baseline =====
+      -Wall,
+      -Wextra,
+      -Wpedantic,
+
+      # ===== Common strictness (Clang & GCC spirit) =====
+      -Wshadow,
+      -Wnon-virtual-dtor,
+      -Woverloaded-virtual,
+      -Wsuggest-override,
+      -Wconversion,
+      -Wsign-compare,
+      -Wold-style-cast,
+      -Wcast-align,
+      -Wformat=2,
+      -Wswitch-enum,
+
+      # ===== Clang-only high value =====
+      -Wdeprecated-copy,
+      -Wdangling,
+      -Wunused-private-field,
+      -Wimplicit-fallthrough,
+      -Wextra-semi,
+      -Wnull-dereference,
+      -Wdouble-promotion,
+
+      # ===== Lifetime & safety hints =====
+      -Wrange-loop-analysis,
+      -Wcomma,
+      -Wunreachable-code,
+      -Wmissing-field-initializers,
+    ]
+
+Diagnostics:
+  ClangTidy:
+    Add:
+      [
+        clang-analyzer-*,
+        bugprone-*,
+        performance-*,
+        cppcoreguidelines-*,
+        modernize-*,
+        readability-*,
+      ]
+    Remove:
+      [
+        readability-identifier-length,
+        cppcoreguidelines-avoid-magic-numbers,
+        readability-magic-numbers,
+      ]
+
+  UnusedIncludes: Strict
+
+InlayHints:
+  Enabled: true
+  ParameterNames: true
+  DeducedTypes: true

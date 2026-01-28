@@ -46,8 +46,9 @@ function(enable_strict_warnings target)
             -Wnon-virtual-dtor
             -Woverloaded-virtual
             -Wsuggest-override
-            -Wlifetime
-            -Wslicing
+            -Wold-style-cast
+            -Wformat=2
+            -Wswitch-enum
 
             -Werror=sign-compare
             -Werror=return-type
@@ -59,8 +60,6 @@ function(enable_strict_warnings target)
             -Werror=non-virtual-dtor
             -Werror=overloaded-virtual
             -Werror=suggest-override
-            -Werror=lifetime
-            -Werror=slicing
         )
 
     elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
