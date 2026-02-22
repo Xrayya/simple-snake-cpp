@@ -17,5 +17,5 @@ public:
 
 private:
   Game game;
-  std::unique_ptr<IRenderer> renderer;
+  std::unique_ptr<Renderer> renderer;
 };

@@ -3,16 +3,16 @@
 #include "game_core/game.hpp"
 #include <memory>
 
-class IRenderer {
+class Renderer {
 public:
-  IRenderer(std::shared_ptr<Game> game);
+  Renderer(std::shared_ptr<Game> game);
 
-  IRenderer(const IRenderer &) = default;
-  IRenderer(IRenderer &&) = delete;
-  auto operator=(const IRenderer &) -> IRenderer & = default;
-  auto operator=(IRenderer &&) -> IRenderer & = delete;
+  Renderer(const Renderer &) = default;
+  Renderer(Renderer &&) = delete;
+  auto operator=(const Renderer &) -> Renderer & = default;
+  auto operator=(Renderer &&) -> Renderer & = delete;
 
-  virtual ~IRenderer() = default;
+  virtual ~Renderer() = default;
 
   std::shared_ptr<Game> game_;
 

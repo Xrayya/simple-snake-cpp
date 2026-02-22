@@ -3,7 +3,7 @@
 #include "game_core/renderer/renderer.hpp"
 #include "raylib.h"
 
-class RaylibRenderer : public IRenderer {
+class RaylibRenderer : public Renderer {
 public:
   RaylibRenderer(std::shared_ptr<Game>, int cellSize);
 

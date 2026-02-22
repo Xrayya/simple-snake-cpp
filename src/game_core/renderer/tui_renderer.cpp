@@ -21,7 +21,7 @@ struct Icon {
 };
 
 TUIRenderer::TUIRenderer(std::shared_ptr<Game> game)
-    : IRenderer(std::move(game)),
+    : Renderer(std::move(game)),
       layout(static_cast<size_t>(game_->getLayout().height_),
              std::vector<std::string>(
                  static_cast<size_t>(game_->getLayout().width_), " ")) {}

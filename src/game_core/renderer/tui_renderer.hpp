@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-class TUIRenderer : public IRenderer {
+class TUIRenderer : public Renderer {
 public:
   TUIRenderer(std::shared_ptr<Game> game);
 

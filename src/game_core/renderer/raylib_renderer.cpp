@@ -6,7 +6,7 @@
 enum class SpriteType : std::uint8_t { SnakeHead, SnakeBody, SnakeTail, Food };
 
 RaylibRenderer::RaylibRenderer(std::shared_ptr<Game> game, int cellSize)
-    : IRenderer(std::move(game)), cellSize(cellSize),
+    : Renderer(std::move(game)), cellSize(cellSize),
       apple_texture{0, 0, 0, 0, 0}, snake_head_texture{0, 0, 0, 0, 0},
       snake_body_texture{0, 0, 0, 0, 0} {
 

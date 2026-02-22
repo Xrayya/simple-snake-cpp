@@ -22,7 +22,7 @@ auto main() -> int {
   std::shared_ptr<Game> game =
       std::make_shared<Game>(layout, std::move(food_factory), time_context, 6);
 
-  std::unique_ptr<IRenderer> renderer =
+  std::unique_ptr<Renderer> renderer =
       std::make_unique<RaylibRenderer>(game, 30);
 
   std::unique_ptr<event::Input> input_event;
